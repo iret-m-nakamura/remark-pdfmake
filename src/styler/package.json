@@ -1,8 +1,7 @@
 {
   "name": "ddast-util-style",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
-  "private": true,
   "description": "ddast utility that resolves a theme into ddast, fixing its appearance",
   "license": "MIT",
   "author": "しろうさ (shirousa)",
@@ -11,10 +10,40 @@
     "url": "git+https://github.com/iret-m-nakamura/remark-pdfmake.git",
     "directory": "src/styler"
   },
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "publishConfig": {
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.mts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.mts",
+        "import": "./dist/index.mjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepack": "tsdown"
+  },
   "dependencies": {
     "ddast": "workspace:*",
     "@types/pdfmake": "^0.3.3",
     "pdfmake": "^0.3.11",
     "unified": "^11.0.5"
+  },
+  "devDependencies": {
+    "rehype-ddast": "workspace:*",
+    "remark-pdfmake": "workspace:*",
+    "tsdown": "^0.23.0",
+    "typescript": "^7.0.2",
+    "unist-util-assert": "^4.0.0",
+    "@types/unist": "^3.0.3"
   }
 }

@@ -1,9 +1,8 @@
 {
   "name": "pdfmake-render",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
-  "private": true,
-  "description": "Plain PDF rendering and caller-supplied font fetching utilities on top of pdfmake (covers src/render/ and src/fonts/; see ARCHITECTURE.md)",
+  "description": "Plain PDF rendering and caller-supplied font fetching utilities on top of pdfmake (covers src/render/, including src/render/fonts/; see ARCHITECTURE.md)",
   "license": "MIT",
   "author": "しろうさ (shirousa)",
   "repository": {
@@ -11,12 +10,38 @@
     "url": "git+https://github.com/iret-m-nakamura/remark-pdfmake.git",
     "directory": "src/render"
   },
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "publishConfig": {
+    "main": "./dist/index.mjs",
+    "types": "./dist/index.d.mts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.mts",
+        "import": "./dist/index.mjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepack": "tsdown"
+  },
   "dependencies": {
     "@types/pdfmake": "^0.3.3",
     "fontkit": "^2.0.4",
     "pdfmake": "^0.3.11"
   },
   "devDependencies": {
-    "@types/fontkit": "^2.0.9"
+    "@types/fontkit": "^2.0.9",
+    "ddast-util-style": "workspace:*",
+    "remark-pdfmake": "workspace:*",
+    "tsdown": "^0.23.0",
+    "typescript": "^7.0.2"
   }
 }

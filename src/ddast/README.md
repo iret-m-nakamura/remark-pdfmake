@@ -1,15 +1,17 @@
 # ddast
 
-**ddast**（Document Definition AST）は、pdfmake の組版要素（`text`/`stack`/`table`/`ul`/`ol`/
-`canvas`/`image`）を語彙にした構文木の仕様である。[unist](https://github.com/syntax-tree/unist)
-を拡張しており、その汎用ツール（`unist-util-visit` 等）をそのまま利用できる。
+**ddast** (Document Definition AST) is the spec for a syntax tree whose vocabulary is
+pdfmake's own layout elements (`text`/`stack`/`table`/`ul`/`ol`/`canvas`/`image`). It extends
+[unist](https://github.com/syntax-tree/unist), so unist's generic tooling (`unist-util-visit`,
+etc.) works on it directly.
 
-mdast が HTML の意味論を持たない Markdown の構文木であるのと同じように、ddast は HTML の
-意味論（heading・blockquote・emphasis...）を持たない、**pdfmake がそのまま受け取れる形**の
-構文木である。ddast を生成する層（hast → ddast）と、theme を見て見た目を確定させる層
-（ddast → ddast）は、hast の意味論から pdfmake の語彙への変換をどう行うかという別の関心事
-であり、ここでは扱わない。ddast を最終的な pdfmake の `TDocumentDefinitions`（docDefinition）
-へ転写する層についても同様で、ddast は「転写元の形」だけを定義する。
+Just as mdast is a Markdown syntax tree with no HTML semantics, ddast is a syntax tree with no
+HTML semantics (heading, blockquote, emphasis, ...) — it's shaped so that **pdfmake can take it
+as-is**. How HTML semantics get mapped onto pdfmake's vocabulary is a separate concern handled
+by the layer that produces ddast (hast → ddast) and the layer that fixes its appearance using a
+theme (ddast → ddast); neither is this package's concern. The same goes for the layer that
+finally transcribes ddast into pdfmake's `TDocumentDefinitions` (docDefinition) — ddast defines
+only "the shape being transcribed from".
 
 ## Contents
 
@@ -44,9 +46,9 @@ interface Root extends Parent {
 }
 ```
 
-**Root**（[Parent](https://github.com/syntax-tree/unist#parent)）は文書全体を表す。木の根
-としてのみ現れ、他のノードの子にはならない（[unist の Root](https://github.com/syntax-tree/unist#root)
-と同じ制約）。
+**Root** ([Parent](https://github.com/syntax-tree/unist#parent)) represents the whole document.
+It only ever appears as the root of the tree, never as another node's child (the same
+constraint as [unist's Root](https://github.com/syntax-tree/unist#root)).
 
 ### `Decoration`
 
@@ -60,22 +62,22 @@ interface Decoration {
 }
 ```
 
-**Decoration** は見た目が確定した後のノードが持つ、pdfmake 自身のプロパティ名をそのまま
-使うフィールドの集まりで、ほとんどのブロックノードが mixin する。pdfmake の `Style`/
-`ContentBase`（あらゆる Content が共通に持てるプロパティ）に対応する。値を持たないフィールド
-はキーごと省略する（`undefined` という値では表現しない）。
+**Decoration** is the set of fields, using pdfmake's own property names as-is, that a node
+carries once its appearance has been fixed; most block nodes mix it in. It corresponds to
+pdfmake's `Style`/`ContentBase` (properties every Content can carry). A field with no value is
+omitted entirely by key (never represented as an explicit `undefined`).
 
-`border`/`borderColor`（セルの罫線）は Decoration に含まれない。pdfmake の型定義では
-この2つは「Content がテーブルセルとして使われる場合にだけ意味を持つ」プロパティ
-（`TableCellProperties`）であり、`Style`/`ContentBase` には無いため、[TableCell](#tablecell)
-自身にだけ持たせる。
+`border`/`borderColor` (a cell's borders) are not part of Decoration. In pdfmake's own type
+definitions these two only make sense "when a Content is used as a table cell"
+(`TableCellProperties`) — they aren't part of `Style`/`ContentBase` — so only
+[TableCell](#tablecell) itself carries them.
 
 ## Inline content
 
-Inline content（**Inline**）は [TextBlock](#textblock) や [TableCell](#tablecell) の中身
-（文字列や、style 参照を持つ入れ子の run）を表す。pdfmake 自身には "run" という独立した
-組版要素は無く、`text` プロパティの配列要素（文字列、または `{text, style}` の入れ子）を
-指す呼称にすぎない。
+Inline content (**Inline**) is what makes up the contents of a [TextBlock](#textblock) or
+[TableCell](#tablecell) (a string, or a nested run carrying a style reference). pdfmake itself
+has no independent layout element called a "run" — it's just a name for an element of the
+`text` property's array (a string, or a nested `{text, style}`).
 
 ```ts
 type Inline = Text | Run | Link | Break;
@@ -90,9 +92,9 @@ interface Text extends Literal {
 }
 ```
 
-**Text**（[Literal](https://github.com/syntax-tree/unist#literal)）は文字列そのものを表す。
-pdfmake の text 配列では常に生の `string` としてしか現れないため、Decoration を持たない
-（値を持たせたければ [Run](#run) を使う）。
+**Text** ([Literal](https://github.com/syntax-tree/unist#literal)) represents a plain string.
+In pdfmake's text array it only ever appears as a raw `string`, so it carries no Decoration
+(use [Run](#run) if you need to attach one).
 
 ### `Run`
 
@@ -102,13 +104,12 @@ interface Run extends Parent {
   role: InlineRole;
   children: Inline[];
 }
-
-type InlineRole = "strong" | "em" | "del" | "u" | "small" | "code" | string;
 ```
 
-**Run** は style 参照を持つ入れ子のインライン要素（`<strong>`/`<code>` 等に相当）を表す。
-`role` は named style（pdfmake の `styles` 辞書）のキーとしてそのまま使われる。既知の6種類
-以外の任意の文字列も許容する（markdown の語彙に無い HTML タグをそのまま残すため）。
+**Run** represents a nested inline element carrying a style reference (the equivalent of
+`<strong>`/`<code>`, etc.). `role` is used directly as a key into the named style dictionary
+(pdfmake's `styles`). Any string beyond the 6 known ones is also allowed, so an HTML tag with
+no markdown equivalent can be preserved as-is.
 
 ### `Link`
 
@@ -121,8 +122,9 @@ interface Link extends Parent {
 }
 ```
 
-**Link** はハイパーリンクを表す。`internal: false` の場合 `url` は外部 URL、`internal: true`
-の場合は同一文書内の着地点名（pdfmake の `linkToDestination` にそのまま渡す値）。
+**Link** represents a hyperlink. When `internal: false`, `url` is an external URL; when
+`internal: true`, it's a destination name within the same document (passed straight through to
+pdfmake's `linkToDestination`).
 
 ### `Break`
 
@@ -132,13 +134,13 @@ interface Break extends Node {
 }
 ```
 
-**Break** は改行（`<br>`）を表す、子を持たない葉ノード。pdfmake の text 配列では常に
-`"\n"` という生の文字列としてしか現れない。
+**Break** is a childless leaf node representing a line break (`<br>`). In pdfmake's text array
+it only ever appears as a raw `"\n"` string.
 
 ## Block content
 
-Block content（**Block**）は pdfmake の1つの組版要素（root・stack・ul/ol・テーブルセルの
-直下に置ける単位）を表す。
+Block content (**Block**) represents a single pdfmake layout element (a unit that can be placed
+directly under root, a stack, a list, or a table cell).
 
 ```ts
 type Block = TextBlock | Stack | Table | List | Canvas | Image;
@@ -150,17 +152,18 @@ type Block = TextBlock | Stack | Table | List | Canvas | Image;
 interface TextBlock extends Parent, Decoration {
   type: "textBlock";
   role?: "heading" | "codeBlock" | "pageBreakMarker" | "paragraph";
-  depth?: 1 | 2 | 3 | 4 | 5 | 6;    // role: "heading" のときだけ意味を持つ
-  occurrence?: number;              // role: "heading" のときだけ意味を持つ
-  id?: string;                      // 内部リンクの着地点名
+  depth?: 1 | 2 | 3 | 4 | 5 | 6;    // only meaningful when role: "heading"
+  occurrence?: number;              // only meaningful when role: "heading"
+  id?: string;                      // internal link destination name
   children: Inline[];
 }
 ```
 
-**TextBlock** は pdfmake の `{text: [...]}` を表す。unist の慣例では文字列リテラルの
-`type` が `"text"` になるため（[Text](#text) 参照）、このブロック要素は `"text"` を
-名乗らず `"textBlock"` にする。`role` で「見出し・コードブロック・改ページマーカー・
-地の文のどれか」を残す。`depth`/`occurrence` は見出し専用、`id` は内部リンクの着地点。
+**TextBlock** represents pdfmake's `{text: [...]}`. Since unist convention already reserves
+`type: "text"` for the string literal node (see [Text](#text)), this block element is named
+`"textBlock"` instead. `role` records whether it's a heading, code block, page-break marker, or
+plain paragraph. `depth`/`occurrence` only apply to headings; `id` is an internal link's
+destination.
 
 ### `Stack`
 
@@ -172,7 +175,7 @@ interface Stack extends Parent, Decoration {
 }
 ```
 
-**Stack** は pdfmake の `{stack: [...]}`（縦に積んだブロック列）を表す。
+**Stack** represents pdfmake's `{stack: [...]}` (a vertically stacked sequence of blocks).
 
 ### Table content
 
@@ -190,11 +193,12 @@ interface Table extends Parent, Decoration {
 }
 ```
 
-**Table** は pdfmake の `{table: {body: [...]}}` を表す。`role: "sidebar"` は見出し・引用の
-左バー構成（`columns` ではなく `table` を使うのは、セルの `fillColor` が行の高さ全体に
-伸びる pdfmake の挙動を利用するため）、`role` が無いものは GFM の通常テーブル。`children`
-（`TableRow[]`、各行は `TableCell[]`）は pdfmake の `Table.body: TableCell[][]`（2次元配列）
-に転写される際に組み直される。
+**Table** represents pdfmake's `{table: {body: [...]}}`. `role: "sidebar"` is the left-bar
+layout used for headings and blockquotes (a `table` is used instead of `columns` specifically
+to exploit pdfmake's behavior of stretching a cell's `fillColor` across the full row height);
+a `Table` with no `role` is a plain GFM table. `children` (`TableRow[]`, each row holding
+`TableCell[]`) gets reassembled when transcribed into pdfmake's `Table.body: TableCell[][]`
+(a 2D array).
 
 #### `TableRow`
 
@@ -205,8 +209,9 @@ interface TableRow extends Parent {
 }
 ```
 
-**TableRow** はテーブルの1行を表す。pdfmake 自身には「行」を表す専用のノード型は無く、
-ただの配列（`TableCell[]`）でしかないが、ddast では unist の Parent に合わせて包む。
+**TableRow** represents one row of a table. pdfmake itself has no dedicated node type for a
+"row" — it's just a plain array (`TableCell[]`) — but ddast wraps it in a node to match unist's
+Parent shape.
 
 #### `TableCell`
 
@@ -221,12 +226,13 @@ interface TableCell extends Parent, Decoration {
 }
 ```
 
-**TableCell** はテーブルのセルを表す。pdfmake 自身は `TableCell = Content & TableCellProperties`
-（セル用の追加プロパティを Content に直接マージする、セル専用の別ノード型は無い）だが、
-ddast では unist の Parent（`children` は1次元の `Node[]`）に合わせるため、セルの中身
-（通常は1要素の [TextBlock](#textblock)、または loose な内容なら [Stack](#stack)）を
-`children` に持つ独立したノードにする。`border`/`borderColor` は [Decoration](#decoration)
-ではなくこのノード自身にだけ持たせる（[Decoration](#decoration) 参照）。
+**TableCell** represents a table cell. pdfmake itself defines
+`TableCell = Content & TableCellProperties` (cell-specific properties are merged directly onto
+a Content — there's no separate node type for a cell), but ddast makes it an independent node
+with `children` (a 1-dimensional `Node[]`, matching unist's Parent) holding the cell's contents
+(normally a single [TextBlock](#textblock), or a [Stack](#stack) for loose content).
+`border`/`borderColor` live only on this node itself, not in [Decoration](#decoration) (see
+[Decoration](#decoration)).
 
 ### `List`
 
@@ -237,9 +243,9 @@ interface List extends Parent, Decoration {
 }
 ```
 
-**List** は pdfmake の `{ul: [...]}` / `{ol: [...]}` を表す。pdfmake 自体に「リスト項目」
-という独立要素は無く、`ul`/`ol` の直下に子（[TextBlock](#textblock) や [Stack](#stack)）を
-並べる。
+**List** represents pdfmake's `{ul: [...]}` / `{ol: [...]}`. pdfmake has no independent "list
+item" element of its own — children ([TextBlock](#textblock) or [Stack](#stack)) sit directly
+under `ul`/`ol`.
 
 ### `Canvas`
 
@@ -256,7 +262,8 @@ interface Canvas extends Node, Decoration {
 }
 ```
 
-**Canvas** は pdfmake の `{canvas: [...]}`（水平線）を表す、子を持たない葉ノード。
+**Canvas** is a childless leaf node representing pdfmake's `{canvas: [...]}` (a horizontal
+rule).
 
 ### `Image`
 
@@ -270,35 +277,36 @@ interface Image extends Node, Decoration {
 }
 ```
 
-**Image** は pdfmake の `{image: ...}`（`ContentImage`）を表す、子を持たない葉ノード。
-`src` は data: URI・ローカルファイルパス・http(s) URL のいずれか。width/height を両方
-指定するとアスペクト比を保たず引き伸ばされる（pdfmake の仕様）。`fit` は縦横比を保ったまま
-収める枠。
+**Image** is a childless leaf node representing pdfmake's `{image: ...}` (`ContentImage`).
+`src` is a data: URI, a local file path, or an http(s) URL. Specifying both width and height
+stretches the image without preserving aspect ratio (pdfmake's own behavior); `fit` is a
+bounding box that preserves aspect ratio.
 
 ## Glossary
 
-すべてのノード種別（[Block](#block-content) と [Inline](#inline-content) を合わせたもの）
-を1つの union にしたものを **DdNode** と呼ぶ。木を下って処理する関数の引数には、実際に
-受け取る階層に応じてこれより narrow な型（Block・Inline・TableRow・TableCell）を使う。
+The union of every node type ([Block](#block-content) and [Inline](#inline-content) combined)
+is called **DdNode**. Functions that walk the tree use a narrower type appropriate to the level
+they actually receive (Block, Inline, TableRow, TableCell), not this union.
 
 ```ts
 type DdNode = Block | TableRow | TableCell | Inline;
 ```
 
-**Size**（[Table](#table)/[TableCell](#tablecell) の列幅）は `number | "auto" | "*" | string`
-（数値・`"auto"`・`"*"`・`"50%"` 等の文字列）。pdfmake 自身の `Size` 型と同じ形。
+**Size** (a [Table](#table)/[TableCell](#tablecell) column width) is
+`number | "auto" | "*" | string` (a number, `"auto"`, `"*"`, or a string like `"50%"`) — the
+same shape as pdfmake's own `Size` type.
 
-その他の用語は [unist](https://github.com/syntax-tree/unist#nodes) の定義（Node・Parent・
-Literal）に従う。
+Every other term follows [unist](https://github.com/syntax-tree/unist#nodes)'s own definitions
+(Node, Parent, Literal).
 
-### 拡張性についての注記
+### A note on extensibility
 
-mdast/hast は `PhrasingContentMap`/`RootContentMap` のような map interface を経由した
-union にし、第三者が `declare module` でエントリを追加できる拡張性を持たせている。ddast は
-現状、`Block`/`Inline` を閉じた union のままにしている（このドキュメント／`ddast.ts` の
-変更でしかノード種別を追加できない）。map interface への変更は破壊的変更になるため、
-サードパーティによる拡張が実際に必要になった時点で改めて要否を判断する。
+mdast/hast achieve third-party extensibility by routing their unions through a map interface
+(`PhrasingContentMap`/`RootContentMap`, etc.) that a third party can add entries to via
+`declare module`. ddast currently keeps `Block`/`Inline` as closed unions (a node type can only
+be added by changing this document and `ddast.ts`). Moving to a map interface would be a
+breaking change, so that decision is deferred until third-party extension is actually needed.
 
 ## License
 
-[MIT](../../LICENSE)（remark-pdfmake 全体と同じ）
+[MIT](../../LICENSE) (same as remark-pdfmake as a whole)

@@ -8,7 +8,9 @@ import { fileURLToPath } from "node:url";
 /**
  * npm に配布する dist/**\/*.d.mts が、外部から解決できない参照を含んでいないことを検証する。
  * ここは producer/styler/compiler のような特定の層ではなく、公開物（npm パッケージ）としての
- * 契約を検証する（詳細は pdfmakeTypes.ts・ARCHITECTURE.md 参照）。
+ * 契約を検証する（詳細は pdfmakeTypes.ts・ARCHITECTURE.md 参照）。remark-pdfmake 自身と、
+ * 個別に publish される5つのサブパッケージ（ddast/rehype-ddast/ddast-util-style/
+ * ddast-util-to-pdfmake/pdfmake-render）はそれぞれ独立した dist/ を持つため、全て検証する。
  *
  * - `pdfmake` 本体は package.json に `exports` を持たないため、`pdfmake/interfaces` の
  *   ようなサブパスは Node.js の nodenext モジュール解決では型として解決できない
@@ -20,7 +22,8 @@ import { fileURLToPath } from "node:url";
  */
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
-const distDir = join(repoRoot, "dist");
+
+const PACKAGE_DIRS = [".", "src/ddast", "src/rehype-ddast", "src/styler", "src/compiler", "src/render"];
 
 function collectFiles(dir: string, suffix: string): string[] {
   const out: string[] = [];
@@ -34,18 +37,23 @@ function collectFiles(dir: string, suffix: string): string[] {
 
 const UNRESOLVABLE_SUBPATH_IMPORT = /(?:from\s+|import\()["']pdfmake\/interfaces["']/;
 
-describe("dist/（npm に配布する公開物）", () => {
-  before(() => {
-    execFileSync(join(repoRoot, "node_modules/.bin/tsdown"), { cwd: repoRoot, stdio: "ignore" });
-  });
+for (const relDir of PACKAGE_DIRS) {
+  const packageDir = join(repoRoot, relDir);
+  const distDir = join(packageDir, "dist");
 
-  it("公開 API の型が pdfmake のサブパス（pdfmake/interfaces）を参照しない（nodenext 解決の利用者向け）", () => {
-    for (const file of collectFiles(distDir, ".d.mts")) {
-      assert.doesNotMatch(readFileSync(file, "utf8"), UNRESOLVABLE_SUBPATH_IMPORT, `${file} が pdfmake/interfaces を import している`);
-    }
-  });
+  describe(`${relDir === "." ? "remark-pdfmake" : relDir} の dist/（npm に配布する公開物）`, () => {
+    before(() => {
+      execFileSync(join(packageDir, "node_modules/.bin/tsdown"), { cwd: packageDir, stdio: "ignore" });
+    });
 
-  it("外部パッケージの型定義を dist/node_modules へコピーしない", () => {
-    assert.equal(existsSync(join(distDir, "node_modules")), false);
+    it("公開 API の型が pdfmake のサブパス（pdfmake/interfaces）を参照しない（nodenext 解決の利用者向け）", () => {
+      for (const file of collectFiles(distDir, ".d.mts")) {
+        assert.doesNotMatch(readFileSync(file, "utf8"), UNRESOLVABLE_SUBPATH_IMPORT, `${file} が pdfmake/interfaces を import している`);
+      }
+    });
+
+    it("外部パッケージの型定義を dist/node_modules へコピーしない", () => {
+      assert.equal(existsSync(join(distDir, "node_modules")), false);
+    });
   });
-});
+}

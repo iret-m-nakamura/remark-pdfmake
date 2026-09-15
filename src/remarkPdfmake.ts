@@ -1,11 +1,10 @@
 import type { Plugin } from "unified";
 import type { Root as MdastRoot } from "mdast";
 import { withMdastToHast } from "./ast.ts";
-import { rehypeToDdast } from "./rehype-ddast/rehypeDdast.ts";
-import { styleTransform } from "./styler/styler.ts";
-import { pdfmakeCompiler } from "./compiler/compiler.ts";
-import type { ToDocDefinitionOptions } from "./compiler/compiler.ts";
-import { DEFAULT_THEME } from "./styler/theme.ts";
+import { rehypeToDdast } from "rehype-ddast";
+import { styleTransform, DEFAULT_THEME } from "ddast-util-style";
+import { pdfmakeCompiler } from "ddast-util-to-pdfmake";
+import type { ToDocDefinitionOptions } from "ddast-util-to-pdfmake";
 import type { TDocumentDefinitions } from "./pdfmakeTypes.ts";
 
 /**

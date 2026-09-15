@@ -99,7 +99,7 @@ const dd = file.result; // TDocumentDefinitions
 
 remark-pdfmake はどのフォントを使うかについて意見を持たない。どのフォントを・どの名前で・
 どこから取得するかは呼び出し側が決め、`FontSourceMap` として `loadFonts()`
-（[src/fonts/fonts.ts](./src/fonts/fonts.ts) 参照）に渡す。`loadFonts()` はそれを実行時に
+（[src/render/fonts/fonts.ts](./src/render/fonts/fonts.ts) 参照）に渡す。`loadFonts()` はそれを実行時に
 取得・キャッシュし（フォントファイル自体はリポジトリに同梱しない）、
 `renderToFile()`/`renderToBuffer()` が要求する `TFontDictionary` に組み立てる。
 [sample/generate.ts](./sample/generate.ts) は日本語フォント（Noto Sans CJK JP）・

@@ -1,8 +1,7 @@
 {
   "name": "ddast",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
-  "private": true,
   "description": "Document Definition AST — a unist-compliant syntax tree whose vocabulary is pdfmake's own layout elements",
   "license": "MIT",
   "author": "しろうさ (shirousa)",
@@ -11,7 +10,33 @@
     "url": "git+https://github.com/iret-m-nakamura/remark-pdfmake.git",
     "directory": "src/ddast"
   },
+  "main": "./ddast.ts",
+  "types": "./ddast.ts",
+  "exports": {
+    ".": "./ddast.ts"
+  },
+  "publishConfig": {
+    "main": "./dist/ddast.mjs",
+    "types": "./dist/ddast.d.mts",
+    "exports": {
+      ".": {
+        "types": "./dist/ddast.d.mts",
+        "import": "./dist/ddast.mjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepack": "tsdown"
+  },
   "dependencies": {
     "@types/unist": "^3.0.3"
+  },
+  "devDependencies": {
+    "tsdown": "^0.23.0",
+    "typescript": "^7.0.2"
   }
 }

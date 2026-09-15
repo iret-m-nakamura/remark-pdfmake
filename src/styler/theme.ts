@@ -1,5 +1,5 @@
 import type { Size, Style } from "pdfmake";
-import type { PageSize } from "../pdfmakeTypes.ts";
+import type { PageSize } from "./pdfmakeTypes.ts";
 import { pageWidthPt } from "./pageSizes.ts";
 
 /**

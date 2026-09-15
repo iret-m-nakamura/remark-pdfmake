@@ -1,5 +1,5 @@
 import { writeFileSync } from "node:fs";
-import type { TDocumentDefinitions, TFontDictionary } from "../pdfmakeTypes.ts";
+import type { TDocumentDefinitions, TFontDictionary } from "./pdfmakeTypes.ts";
 // pdfmake の named export（pdfMake.createPdf 等）はブラウザ向けの Client API。
 // Node で実際に PDF バイト列を生成するには、CommonJS 実装（js/配下）の
 // PdfPrinter・URLResolver・virtual-fs を直接使う（README には Node 向けの明記が無い）。

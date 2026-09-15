@@ -1,5 +1,5 @@
 import type { Plugin } from "unified";
-import type * as dd from "../ddast/ddast.ts";
+import type * as dd from "ddast";
 import { DEFAULT_THEME, contentWidthOf, type PdfmakeTheme } from "./theme.ts";
 
 /**

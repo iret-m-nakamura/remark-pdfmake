@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { toText } from "hast-util-to-text";
 import type { Comment, Element, ElementContent, Root as HastRoot, RootContent as HastRootContent } from "hast";
 import type { Plugin } from "unified";
-import type { Block, Image, Inline, Root, Size, Table, TableCell, TableRow } from "../ddast/ddast.ts";
+import type { Block, Image, Inline, Root, Size, Table, TableCell, TableRow } from "ddast";
 import { createSlugger } from "./slug.ts";
 
 /**

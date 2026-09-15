@@ -104,7 +104,7 @@ For a smaller working example, see [sample/](./sample/) (running
 
 remark-pdfmake has no opinion on which fonts to use — the caller decides which fonts,
 under which names, and from where, and hands that as a `FontSourceMap` to `loadFonts()`
-(see [src/fonts/fonts.ts](./src/fonts/fonts.ts)), which fetches/caches them at runtime
+(see [src/render/fonts/fonts.ts](./src/render/fonts/fonts.ts)), which fetches/caches them at runtime
 (font files are not bundled in the repository) and resolves them into the
 `TFontDictionary` `renderToFile()`/`renderToBuffer()` expect.
 [sample/generate.ts](./sample/generate.ts) is a complete example that chooses Noto Sans
