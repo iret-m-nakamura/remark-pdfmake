@@ -1,6 +1,6 @@
 {
   "name": "remark-pdfmake",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A unified-based pipeline that converts Markdown into pdfmake's TDocumentDefinitions and renders it straight to PDF bytes",
   "type": "module",
   "packageManager": "pnpm@11.15.1",
