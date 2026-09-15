@@ -1,8 +1,8 @@
 # pdfmake-render
 
-[pdfmake](https://github.com/bpampuch/pdfmake) の `TDocumentDefinitions` を実際に PDF バイト列へ
-レンダリングする薄いラッパーと、呼び出し側が指示したフォントを取得・キャッシュする
-ユーティリティ。木構造（ddast/docDefinition）は扱わない。
+A thin wrapper that renders a [pdfmake](https://github.com/bpampuch/pdfmake)
+`TDocumentDefinitions` into actual PDF bytes, plus a utility that fetches and caches whatever
+fonts the caller points it at. Neither touches tree structures (ddast/docDefinition).
 
 ```ts
 import { loadFonts, renderToBuffer } from "pdfmake-render";
@@ -17,17 +17,16 @@ const buffer = await renderToBuffer(dd, fonts, {
 });
 ```
 
-## 責務
+## Responsibilities
 
-- **render**: pdfmake の Node 向け API（`PdfPrinter`/`URLResolver`/`virtual-fs`）を
-  呼び出すだけの薄いラッパー。ネットワーク・ファイルアクセスに関する独自の判断は行わない。
-  `RenderPolicy`（`localAccessPolicy`/`urlAccessPolicy`）は pdfmake 自身の
-  `setLocalAccessPolicy()`/`setUrlAccessPolicy()` へそのまま中継するだけの必須引数
-  （呼び出し側に必ず選択させるための設計。制限が要らなければ `{}` を渡す）
-- **fonts**: どのフォントを・どの名前で・どこから取得するかは呼び出し側が
-  `FontSourceMap` として指示し、`loadFonts()` はそれを取得・キャッシュするだけ
-  （フォントの選定はこのパッケージの関心事ではない）
+- **render**: a thin wrapper around pdfmake's own Node API (`PdfPrinter`/`URLResolver`/
+  `virtual-fs`) — no independent judgment about network or file access. `RenderPolicy`
+  (`localAccessPolicy`/`urlAccessPolicy`) is passed straight through to pdfmake's own
+  `setLocalAccessPolicy()`/`setUrlAccessPolicy()`. It's a required argument by design — the
+  caller must always make this choice explicitly; pass `{}` if no restriction is needed.
+- **fonts**: which fonts to use, under which names, and from where is entirely up to the
+  caller, expressed as a `FontSourceMap`. `loadFonts()` only fetches and caches what it's
+  told — choosing fonts is not this package's concern.
 
-詳細な責務の境界は
-[ARCHITECTURE.md](https://github.com/iret-m-nakamura/remark-pdfmake/blob/main/ARCHITECTURE.md)
-の「render.ts（docDefinition → PDF バイト列）」参照。
+For the full boundary of responsibilities, see "render.ts (docDefinition → PDF bytes)" in
+[ARCHITECTURE.md](https://github.com/iret-m-nakamura/remark-pdfmake/blob/main/ARCHITECTURE.md).

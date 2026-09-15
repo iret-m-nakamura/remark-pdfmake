@@ -1,8 +1,8 @@
 # ddast-util-to-pdfmake
 
-見た目が確定した [ddast](https://github.com/iret-m-nakamura/remark-pdfmake/tree/main/src/ddast)
-を、[pdfmake](https://github.com/bpampuch/pdfmake) の `TDocumentDefinitions`
-（docDefinition）へ転写するユーティリティ。
+A utility that transcribes an already-styled
+[ddast](https://github.com/iret-m-nakamura/remark-pdfmake/tree/main/src/ddast) tree into
+[pdfmake](https://github.com/bpampuch/pdfmake)'s `TDocumentDefinitions` (docDefinition).
 
 ```ts
 import { ddastToDocDefinition } from "ddast-util-to-pdfmake";
@@ -10,19 +10,20 @@ import { ddastToDocDefinition } from "ddast-util-to-pdfmake";
 const dd = ddastToDocDefinition(styledDdastRoot, { baseDir: import.meta.dirname });
 ```
 
-unified の Compiler としても使える（`pdfmakeCompiler`）。
+Also usable as a unified Compiler (`pdfmakeCompiler`).
 
-## 責務
+## Responsibilities
 
-- ddast に **既に書き込まれている情報をそのまま** pdfmake のキー名・shape に転写するだけ
-  （`depth`/`role`/行位置などの構造的事実から新しい値を計算しない）
-- 例外として、named style 辞書の組み立て（theme → `docDefinition.styles`）・ローカル
-  画像パスの `baseDir` 結合・外部リンク href の scheme 検証（`javascript:` 等の拒否）の
-  3つだけは compiler 自身が行う
-- 画像・フォント・添付ファイルの実際のアクセス可否（読んでよいか）は検証しない。
-  実際にファイルを読む・fetch するのは pdfmake 自身であり、その可否は
-  `pdfmake-render` の `RenderPolicy` 経由で呼び出し側が指示する
+- Transcribes **only the information already written into ddast** into pdfmake's key names
+  and shapes — it never computes a new value (color, size, lineHeight, fillColor, coordinates,
+  ...) from a structural fact such as `depth`/`role`/row position.
+- Three exceptions are the compiler's own job: assembling the named style dictionary (theme →
+  `docDefinition.styles`), joining a local image path with `baseDir`, and validating an
+  external link's URL scheme (rejecting `javascript:` etc.).
+- Does not validate whether an image/font/attachment is actually allowed to be read — pdfmake
+  itself reads/fetches those, and the caller decides what's allowed via `pdfmake-render`'s
+  `RenderPolicy`.
 
-詳細な責務の境界（3つの例外の根拠を含む）は
-[ARCHITECTURE.md](https://github.com/iret-m-nakamura/remark-pdfmake/blob/main/ARCHITECTURE.md)
-の「compiler.ts（ddast → docDefinition）」参照。
+For the full boundary of responsibilities (including the rationale for the three exceptions),
+see "compiler.ts (ddast → docDefinition)" in
+[ARCHITECTURE.md](https://github.com/iret-m-nakamura/remark-pdfmake/blob/main/ARCHITECTURE.md).

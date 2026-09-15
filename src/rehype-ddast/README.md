@@ -1,7 +1,8 @@
 # rehype-ddast
 
-hast（HTML 相当の構文木）を [ddast](https://github.com/iret-m-nakamura/remark-pdfmake/tree/main/src/ddast)
-（pdfmake の組版要素を語彙にした構文木）へ変換する rehype プラグイン。
+A rehype plugin that transforms hast (an HTML-equivalent syntax tree) into
+[ddast](https://github.com/iret-m-nakamura/remark-pdfmake/tree/main/src/ddast) (a syntax tree
+whose vocabulary is pdfmake's own layout elements).
 
 ```ts
 import { unified } from "unified";
@@ -16,17 +17,17 @@ const ddastRoot = unified()
   .runSync(unified().use(remarkParse).parse(markdown));
 ```
 
-`hastToDdast(root)` として単発の関数でも使える。
+`hastToDdast(root)` is also available as a plain function.
 
-## 責務
+## Responsibilities
 
-- `ul`/`ol`/`table`/内部リンク（anchor）/`<!-- pdf-page-break -->` マーカーなど、
-  markdown 由来の hast 要素を ddast の語彙へ変換する
-- HTML タグと ddast の role（`"strong"`/`"code"`/`"heading"` 等）の 1:1 対応表としての
-  タグ付けもここで行う（判断に theme も計算も要らないもの限定）
-- 出力する ddast は、theme を見て初めて決まる見た目・構造がまだ未確定な状態
-  （それを確定させるのは `ddast-util-style`）
+- Transforms markdown-derived hast elements — `ul`/`ol`/`table`, internal links (anchors),
+  the `<!-- pdf-page-break -->` marker, and so on — into ddast's vocabulary.
+- Also applies simple tagging: a straight 1:1 lookup from an HTML tag to a ddast role
+  (`"strong"`, `"code"`, `"heading"`, etc.) that needs no theme or computation belongs here.
+- The ddast it produces is still "unresolved" wherever theme-dependent appearance or
+  structure would be needed — that resolution is `ddast-util-style`'s job.
 
-詳細な責務の境界（theme を必要とする判断は含まない、等）は
-[ARCHITECTURE.md](https://github.com/iret-m-nakamura/remark-pdfmake/blob/main/ARCHITECTURE.md)
-の「rehypeDdast.ts（hast → ddast）」参照。
+For the full boundary of responsibilities (what does and doesn't belong here), see
+"rehypeDdast.ts (hast → ddast)" in
+[ARCHITECTURE.md](https://github.com/iret-m-nakamura/remark-pdfmake/blob/main/ARCHITECTURE.md).

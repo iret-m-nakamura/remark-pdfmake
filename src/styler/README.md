@@ -1,7 +1,8 @@
 # ddast-util-style
 
-[ddast](https://github.com/iret-m-nakamura/remark-pdfmake/tree/main/src/ddast) に theme を
-適用し、見た目を確定させる ddast → ddast のユーティリティ。
+A ddast → ddast utility that applies a theme to
+[ddast](https://github.com/iret-m-nakamura/remark-pdfmake/tree/main/src/ddast), fixing its
+appearance.
 
 ```ts
 import { styleDdast, DEFAULT_THEME, mergeTheme } from "ddast-util-style";
@@ -9,17 +10,17 @@ import { styleDdast, DEFAULT_THEME, mergeTheme } from "ddast-util-style";
 const styled = styleDdast(ddastRoot, mergeTheme(DEFAULT_THEME, { heading: { decorations: [] } }));
 ```
 
-unified の Transformer としても使える（`styleTransform`）。
+Also usable as a unified Transformer (`styleTransform`).
 
-## 責務
+## Responsibilities
 
-- theme を受け取り、ddast ノードに **見た目を確定させた値** を書き込む
-  （見出しの左バー/下線、引用のバー有無、テーブルのゼブラ塗り・罫線、named style 名など）
-- theme を見て初めて決まる **構造の組み立て**（見出しを sidebar table にするか
-  headingWithRule にするか等）もここで終わらせる
-- pdfmake 固有のキー名・shape（`ContentTable` 等）は持たず、あくまで ddast の語彙の
-  範囲内で値・構造を確定させる（pdfmake の形への転写は `ddast-util-to-pdfmake` の仕事）
+- Takes a theme and writes **fixed, final appearance values** onto ddast nodes (a heading's
+  left bar vs. underline, whether a blockquote gets a bar, table zebra fills and borders,
+  named style names, and so on).
+- Finishes any **structural decisions that only a theme can settle** here (e.g. whether a
+  heading becomes a sidebar table or a headingWithRule) — never carries pdfmake-specific key
+  names or shapes (`ContentTable`, etc.). It stays within ddast's own vocabulary; the actual
+  transcription into pdfmake's shape is `ddast-util-to-pdfmake`'s job.
 
-詳細な責務の境界は
-[ARCHITECTURE.md](https://github.com/iret-m-nakamura/remark-pdfmake/blob/main/ARCHITECTURE.md)
-の「styler.ts（ddast → ddast）」参照。
+For the full boundary of responsibilities, see "styler.ts (ddast → ddast)" in
+[ARCHITECTURE.md](https://github.com/iret-m-nakamura/remark-pdfmake/blob/main/ARCHITECTURE.md).
