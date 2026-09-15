@@ -1,6 +1,6 @@
 {
   "name": "ddast-util-to-pdfmake",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "private": true,
   "description": "ddast utility that compiles ddast into pdfmake's TDocumentDefinitions",
