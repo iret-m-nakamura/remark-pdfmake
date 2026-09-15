@@ -1,6 +1,6 @@
 {
   "name": "ddast-util-style",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "ddast utility that resolves a theme into ddast, fixing its appearance",
   "license": "MIT",

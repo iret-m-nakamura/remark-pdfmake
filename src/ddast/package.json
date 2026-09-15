@@ -1,6 +1,6 @@
 {
   "name": "ddast",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Document Definition AST — a unist-compliant syntax tree whose vocabulary is pdfmake's own layout elements",
   "license": "MIT",
