@@ -1,7 +1,7 @@
-import type { createPdf } from "pdfmake";
+import type { addFonts, createPdf } from "pdfmake";
 
 /**
- * pdfmake の公開型のうち、`pdfmake` パッケージへの bare import（`from "pdfmake"`）だけでは
+ * `pdfmake` の公開型のうち、`pdfmake` パッケージへの bare import（`from "pdfmake"`）だけでは
  * 得られないものを、実在する値の型から導出して補う置き場所。
  *
  * `pdfmake`（実体）は package.json に `exports` を持たないため、Node.js の nodenext
@@ -17,3 +17,6 @@ import type { createPdf } from "pdfmake";
 
 /** pdfmake に渡す文書定義。createPdf() の第1引数の型をそのまま使う。 */
 export type TDocumentDefinitions = Parameters<typeof createPdf>[0];
+
+/** pdfmake に登録するフォント辞書。addFonts() の引数の型をそのまま使う。 */
+export type TFontDictionary = Parameters<typeof addFonts>[0];

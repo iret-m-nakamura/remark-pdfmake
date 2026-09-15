@@ -2,12 +2,11 @@ import type { Root as MdastRoot } from "mdast";
 import type { Processor } from "unified";
 import type { TDocumentDefinitions } from "./pdfmakeTypes.ts";
 import { hastProcessor } from "./ast.ts";
-import type * as dd from "./ddast/ddast.ts";
-import { rehypeToDdast } from "./rehype-ddast/rehypeDdast.ts";
-import { styleTransform } from "./styler/styler.ts";
-import { pdfmakeCompiler } from "./compiler/compiler.ts";
-import type { ToDocDefinitionOptions } from "./compiler/compiler.ts";
-import { DEFAULT_THEME } from "./styler/theme.ts";
+import type * as dd from "ddast";
+import { rehypeToDdast } from "rehype-ddast";
+import { styleTransform, DEFAULT_THEME } from "ddast-util-style";
+import { pdfmakeCompiler } from "ddast-util-to-pdfmake";
+import type { ToDocDefinitionOptions } from "ddast-util-to-pdfmake";
 
 /**
  * Markdown → mdast → hast → ddast → ddast（見た目確定済み）→ TDocumentDefinitions の

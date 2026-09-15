@@ -25,11 +25,10 @@ markdown --(remark)--> mdast --(remark-rehype+rehype-raw)--> hast
 | `src/rehype-ddast/` | hast → ddast の構造変換（`rehypeDdast.ts`）と見出しスラッグ算出（`slug.ts`。rehypeDdast.ts の内部実装で、利用箇所もそこだけのためここに置く） |
 | `src/styler/` | theme 定義（`theme.ts`）・ページサイズ（`pageSizes.ts`）・ddast への見た目確定（`styler.ts`） |
 | `src/compiler/` | ddast → docDefinition への転写（`compiler.ts`） |
-| `src/render/` | docDefinition → PDF バイト列（`render.ts`） |
-| `src/fonts/` | フォントに関する関心事（呼び出し側が指示したフォントの実ファイルの取得・キャッシュ）を引き受ける層。どのフォントを使うかは決めない（`fonts.ts`）。フォントフォールバック（`fontFallback.ts`。対象フォントで表示できない文字を判定するのもフォントの関心事であり、docDefinition → PDF バイト列の変換そのものである render.ts とは別に扱う） |
+| `src/render/` | docDefinition → PDF バイト列（`render.ts`）。`src/render/fonts/` にフォントに関する関心事（呼び出し側が指示したフォントの実ファイルの取得・キャッシュ）を引き受ける層を同居させる。どのフォントを使うかは決めない（`fonts.ts`）。フォントフォールバック（`fontFallback.ts`。対象フォントで表示できない文字を判定するのもフォントの関心事であり、docDefinition → PDF バイト列の変換そのものである render.ts とは別に扱う） |
 | `src/ast.ts` / `src/processor.ts` / `src/index.ts` | mdast→hast の設定・パイプライン全体の配線・公開面 |
 | `src/remarkPdfmake.ts` | `remark().use()` で使える attacher。`src/index.ts` の default export（下記「公開時のパッケージ構成」参照）。parser（remark-parse）は呼び出し側が持つ前提で、mdast→hast の設定は `ast.ts` の `withMdastToHast()` を共有する |
-| `src/pdfmakeTypes.ts` | 公開 API が使う pdfmake の型（`TDocumentDefinitions`/`TFontDictionary`/`PageSize`）の置き場所。`pdfmake` 本体は package.json に `exports` を持たず、`pdfmake/interfaces` のようなサブパスは nodenext モジュール解決の利用者には届かないため、bare import（`from "pdfmake"`）から辿れる値の型を `Parameters<>`/インデックスアクセスで引用する（型の複製はしない）。公開 API の型はここ経由のものだけを使い、`pdfmake/interfaces` への参照を公開面に残さない |
+| `src/pdfmakeTypes.ts` | `remark-pdfmake` の公開 API が使う pdfmake の型（`TDocumentDefinitions`）の置き場所。`pdfmake` 本体は package.json に `exports` を持たず、`pdfmake/interfaces` のようなサブパスは nodenext モジュール解決の利用者には届かないため、bare import（`from "pdfmake"`）から辿れる値の型を `Parameters<>` で引用する（型の複製はしない）。公開 API の型はここ経由のものだけを使い、`pdfmake/interfaces` への参照を公開面に残さない。同型のファイルが `ddast-util-style`/`ddast-util-to-pdfmake`/`pdfmake-render` にもそれぞれ独立して存在し、各パッケージが必要な型だけを自分の `pdfmake` 依存から導出する |
 | `dist/` | `tsdown` のビルド成果物（git 管理外。`pnpm run build` で生成し、npm には `files` 経由でこれだけを配布する） |
 | `sample/` | 動作例（リポジトリのみで配布。npm パッケージには含めない） |
 | `README.md` / `README_ja.md` / `LICENSE` | 利用者向けの概要・使い方（英語版 README.md・日本語版 README_ja.md。内容は互いの翻訳で、常に両方を更新する）とライセンス（MIT） |
@@ -48,7 +47,7 @@ rehype 側も同様）に従う）。
 | `src/rehype-ddast/` | `rehype-ddast` | hast → ddast の Transformer。rehype パイプラインで `.use()` される producer のため `rehype-` prefix |
 | `src/styler/` | `ddast-util-style` | ddast → ddast（見た目確定）。特定ツリー専用ユーティリティの `[tree]-util-` パターン |
 | `src/compiler/` | `ddast-util-to-pdfmake` | ddast → pdfmake docDefinition。`hast-util-to-html` 等と同じ「ツリー → 他形式」の `-util-to-` パターン |
-| `src/render/` + `src/fonts/` | `pdfmake-render` | 木構造を扱わない素の PDF レンダリング・フォント取得ユーティリティ。unified 系 prefix は不要 |
+| `src/render/`（`src/render/fonts/` を含む） | `pdfmake-render` | 木構造を扱わない素の PDF レンダリング・フォント取得ユーティリティ。unified 系 prefix は不要 |
 | トップレベル（`src/ast.ts`/`src/processor.ts`/`src/remarkPdfmake.ts`/`src/index.ts`） | `remark-pdfmake` | 「markdown を渡せば PDF になる」一括パッケージ。default export（`remarkPdfmake.ts`）が `remark().use()` 対応の attacher で、`remark-` prefix の要件を満たす |
 
 GitHub リポジトリ名（`remark-pdfmake`）は、上記パッケージ群を束ねる monorepo の

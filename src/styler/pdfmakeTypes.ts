@@ -1,7 +1,7 @@
 import type { createPdf } from "pdfmake";
 
 /**
- * pdfmake の公開型のうち、`pdfmake` パッケージへの bare import（`from "pdfmake"`）だけでは
+ * `pdfmake` の公開型のうち、`pdfmake` パッケージへの bare import（`from "pdfmake"`）だけでは
  * 得られないものを、実在する値の型から導出して補う置き場所。
  *
  * `pdfmake`（実体）は package.json に `exports` を持たないため、Node.js の nodenext
@@ -11,9 +11,10 @@ import type { createPdf } from "pdfmake";
  * ここを経由して bare import から辿れる型だけを使い、`pdfmake/interfaces` への
  * 参照を公開面に残さない。
  *
- * ここで定義する型は pdfmake の型を複製するのではなく、`createPdf()`/`addFonts()` の
- * 実際のシグネチャから導出する（値の型を引用するだけで、形を手で書き写さない）。
+ * ここで定義する型は pdfmake の型を複製するのではなく、`createPdf()` の実際の
+ * シグネチャから導出する（値の型を引用するだけで、形を手で書き写さない）。
  */
 
-/** pdfmake に渡す文書定義。createPdf() の第1引数の型をそのまま使う。 */
-export type TDocumentDefinitions = Parameters<typeof createPdf>[0];
+/** pdfmake に渡す文書定義のうち、`pageSize` に指定できる値。createPdf() の第1引数の
+ * 型からそのまま導出する。 */
+export type PageSize = NonNullable<Parameters<typeof createPdf>[0]["pageSize"]>;

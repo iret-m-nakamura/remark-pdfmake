@@ -3,12 +3,12 @@ import assert from "node:assert/strict";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PDFDocument, PDFDict, PDFName } from "pdf-lib";
-import { markdownToDocDefinition } from "../processor.ts";
+import { markdownToDocDefinition } from "remark-pdfmake";
 import { renderToBuffer } from "./render.ts";
-import { loadFonts, fontSupports } from "../fonts/fonts.ts";
-import { TEST_BODY_FONT, TEST_CODE_FONT, TEST_FONT_SOURCES } from "../fonts/testFontSources.ts";
-import { withFontFallback } from "../fonts/fontFallback.ts";
-import { DEFAULT_THEME, mergeTheme } from "../styler/theme.ts";
+import { loadFonts, fontSupports } from "./fonts/fonts.ts";
+import { TEST_BODY_FONT, TEST_CODE_FONT, TEST_FONT_SOURCES } from "./fonts/testFontSources.ts";
+import { withFontFallback } from "./fonts/fontFallback.ts";
+import { DEFAULT_THEME, mergeTheme } from "ddast-util-style";
 
 /**
  * render.ts はヘッダー/フッター・余白・フォント配線を担う経路の最終出力を扱うため、実際の

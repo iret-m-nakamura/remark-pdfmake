@@ -123,7 +123,7 @@ describe("loadFonts()", () => {
 
 describe("fontSupports()", () => {
   it("フォントに存在するグリフの文字は true、存在しない文字は false を返す（pdfmake が依存として同梱する実フォントで検証。ネットワーク不要）", () => {
-    const robotoRegular = join(__dirname, "../../node_modules/pdfmake/fonts/Roboto/Roboto-Regular.ttf");
+    const robotoRegular = join(__dirname, "../node_modules/pdfmake/fonts/Roboto/Roboto-Regular.ttf");
     const supports = fontSupports(robotoRegular);
     assert.equal(supports("A".codePointAt(0)!), true);
     // U+E000 は private-use-area で、どの一般的な欧文フォントにも通常グリフが無い。
@@ -131,12 +131,3 @@ describe("fontSupports()", () => {
   });
 });
 
-describe("sample/licenses/ のライセンス原文", () => {
-  it("licenses/ 配下に OFL の原文が存在し、埋め込み許諾の条項を含む（sample/generate.ts が選ぶ Noto Sans CJK JP・Roboto Mono の根拠。fonts.ts 自身は特定のフォントを選ばない）", () => {
-    for (const file of ["OFL-NotoSansCJK.txt", "OFL-RobotoMono.txt"]) {
-      const text = readFileSync(join(__dirname, "../../sample/licenses", file), "utf8");
-      assert.match(text, /SIL Open Font License/);
-      assert.match(text, /can be bundled, embedded,\s+redistributed/);
-    }
-  });
-});

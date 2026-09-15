@@ -2,11 +2,11 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { assert as assertUnist } from "unist-util-assert";
 import type { Node, Parent } from "unist";
-import { parseMarkdown } from "../ast.ts";
-import { hastToDdast } from "../rehype-ddast/rehypeDdast.ts";
+import { parseMarkdown } from "remark-pdfmake";
+import { hastToDdast } from "rehype-ddast";
 import { styleDdast } from "./styler.ts";
 import { DEFAULT_THEME, contentWidthOf, mergeTheme } from "./theme.ts";
-import type * as dd from "../ddast/ddast.ts";
+import type * as dd from "ddast";
 
 function style(markdown: string, theme = DEFAULT_THEME) {
   return styleDdast(hastToDdast(parseMarkdown(markdown)), theme).children;

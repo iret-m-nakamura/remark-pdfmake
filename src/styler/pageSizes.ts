@@ -1,4 +1,4 @@
-import type { PageSize } from "../pdfmakeTypes.ts";
+import type { PageSize } from "./pdfmakeTypes.ts";
 // pdfmake/js/standardPageSizes.js は `exports.default = {...}` という CJS の書き方をしている。
 // render.ts と同じ理由（実行環境によって default 解決結果が変わる）で unwrap する。
 import standardPageSizesPkg from "pdfmake/js/standardPageSizes.js";
