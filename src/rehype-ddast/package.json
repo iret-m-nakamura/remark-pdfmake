@@ -1,0 +1,20 @@
+{
+  "name": "rehype-ddast",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "description": "rehype plugin that transforms hast into ddast",
+  "license": "MIT",
+  "author": "しろうさ (shirousa)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iret-m-nakamura/remark-pdfmake.git",
+    "directory": "src/rehype-ddast"
+  },
+  "dependencies": {
+    "ddast": "workspace:*",
+    "@types/hast": "^3.0.5",
+    "hast-util-to-text": "^4.0.2",
+    "unified": "^11.0.5"
+  }
+}

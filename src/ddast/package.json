@@ -1,0 +1,17 @@
+{
+  "name": "ddast",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Document Definition AST — a unist-compliant syntax tree whose vocabulary is pdfmake's own layout elements",
+  "license": "MIT",
+  "author": "しろうさ (shirousa)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iret-m-nakamura/remark-pdfmake.git",
+    "directory": "src/ddast"
+  },
+  "dependencies": {
+    "@types/unist": "^3.0.3"
+  }
+}

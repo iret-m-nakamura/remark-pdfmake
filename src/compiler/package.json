@@ -1,0 +1,22 @@
+{
+  "name": "ddast-util-to-pdfmake",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "description": "ddast utility that compiles ddast into pdfmake's TDocumentDefinitions",
+  "license": "MIT",
+  "author": "しろうさ (shirousa)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iret-m-nakamura/remark-pdfmake.git",
+    "directory": "src/compiler"
+  },
+  "dependencies": {
+    "ddast": "workspace:*",
+    "ddast-util-style": "workspace:*",
+    "@types/pdfmake": "^0.3.3",
+    "pdfmake": "^0.3.11",
+    "unified": "^11.0.5",
+    "zod": "^4.6.4"
+  }
+}
