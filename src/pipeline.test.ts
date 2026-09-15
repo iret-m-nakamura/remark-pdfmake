@@ -3,11 +3,9 @@ import assert from "node:assert/strict";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createProcessor, markdownToDocDefinition } from "./processor.ts";
-import { renderToBuffer } from "./render/render.ts";
-import { withFontFallback } from "./fonts/fontFallback.ts";
-import { loadFonts, fontSupports } from "./fonts/fonts.ts";
-import { TEST_BODY_FONT, TEST_CODE_FONT, TEST_FONT_SOURCES } from "./fonts/testFontSources.ts";
-import { DEFAULT_THEME, mergeTheme } from "./styler/theme.ts";
+import { renderToBuffer, withFontFallback, loadFonts, fontSupports } from "pdfmake-render";
+import { TEST_BODY_FONT, TEST_CODE_FONT, TEST_FONT_SOURCES } from "./render/fonts/testFontSources.ts";
+import { DEFAULT_THEME, mergeTheme } from "ddast-util-style";
 import type { TDocumentDefinitions } from "pdfmake/interfaces";
 
 /**

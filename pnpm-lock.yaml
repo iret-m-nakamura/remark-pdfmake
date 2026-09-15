@@ -20,18 +20,24 @@ importers:
       '@types/pdfmake':
         specifier: ^0.3.3
         version: 0.3.3
-      '@types/unist':
-        specifier: ^3.0.3
-        version: 3.0.3
-      fontkit:
-        specifier: ^2.0.4
-        version: 2.0.4
-      hast-util-to-text:
-        specifier: ^4.0.2
-        version: 4.0.2
+      ddast:
+        specifier: workspace:*
+        version: link:src/ddast
+      ddast-util-style:
+        specifier: workspace:*
+        version: link:src/styler
+      ddast-util-to-pdfmake:
+        specifier: workspace:*
+        version: link:src/compiler
       pdfmake:
         specifier: ^0.3.11
         version: 0.3.11
+      pdfmake-render:
+        specifier: workspace:*
+        version: link:src/render
+      rehype-ddast:
+        specifier: workspace:*
+        version: link:src/rehype-ddast
       rehype-raw:
         specifier: ^7.0.0
         version: 7.0.0
@@ -47,13 +53,7 @@ importers:
       unified:
         specifier: ^11.0.5
         version: 11.0.5
-      zod:
-        specifier: ^4.6.4
-        version: 4.6.4
     devDependencies:
-      '@types/fontkit':
-        specifier: ^2.0.9
-        version: 2.0.9
       pdf-lib:
         specifier: ^1.17.1
         version: 1.17.1
@@ -90,12 +90,26 @@ importers:
       zod:
         specifier: ^4.6.4
         version: 4.6.4
+    devDependencies:
+      tsdown:
+        specifier: ^0.23.0
+        version: 0.23.0(typescript@7.0.2)
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
 
   src/ddast:
     dependencies:
       '@types/unist':
         specifier: ^3.0.3
         version: 3.0.3
+    devDependencies:
+      tsdown:
+        specifier: ^0.23.0
+        version: 0.23.0(typescript@7.0.2)
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
 
   src/rehype-ddast:
     dependencies:
@@ -111,6 +125,22 @@ importers:
       unified:
         specifier: ^11.0.5
         version: 11.0.5
+    devDependencies:
+      '@types/unist':
+        specifier: ^3.0.3
+        version: 3.0.3
+      remark-pdfmake:
+        specifier: workspace:*
+        version: link:../..
+      tsdown:
+        specifier: ^0.23.0
+        version: 0.23.0(typescript@7.0.2)
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+      unist-util-assert:
+        specifier: ^4.0.0
+        version: 4.0.0
 
   src/render:
     dependencies:
@@ -127,6 +157,18 @@ importers:
       '@types/fontkit':
         specifier: ^2.0.9
         version: 2.0.9
+      ddast-util-style:
+        specifier: workspace:*
+        version: link:../styler
+      remark-pdfmake:
+        specifier: workspace:*
+        version: link:../..
+      tsdown:
+        specifier: ^0.23.0
+        version: 0.23.0(typescript@7.0.2)
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
 
   src/styler:
     dependencies:
@@ -142,6 +184,25 @@ importers:
       unified:
         specifier: ^11.0.5
         version: 11.0.5
+    devDependencies:
+      '@types/unist':
+        specifier: ^3.0.3
+        version: 3.0.3
+      rehype-ddast:
+        specifier: workspace:*
+        version: link:../rehype-ddast
+      remark-pdfmake:
+        specifier: workspace:*
+        version: link:../..
+      tsdown:
+        specifier: ^0.23.0
+        version: 0.23.0(typescript@7.0.2)
+      typescript:
+        specifier: ^7.0.2
+        version: 7.0.2
+      unist-util-assert:
+        specifier: ^4.0.0
+        version: 4.0.0
 
 packages:
 

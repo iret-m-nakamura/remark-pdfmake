@@ -1,8 +1,8 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import type * as dd from "../ddast/ddast.ts";
+import type * as dd from "ddast";
 import { ddastToContent, ddastToDocDefinition } from "./compiler.ts";
-import { DEFAULT_THEME } from "../styler/theme.ts";
+import { DEFAULT_THEME } from "ddast-util-style";
 
 /**
  * compiler.ts は「ddast に既に書き込まれている情報を pdfmake の形に転写するだけ」の層

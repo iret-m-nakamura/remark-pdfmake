@@ -7,10 +7,10 @@ import { z } from "zod";
 // 型（Content/Style/TDocumentDefinitions）とは別に、ここに閉じて import する。
 import type { ContentCanvas, ContentImage, ContentOrderedList, ContentStack, ContentTable, ContentText, ContentUnorderedList } from "pdfmake/interfaces";
 import type { Plugin } from "unified";
-import type { TDocumentDefinitions } from "../pdfmakeTypes.ts";
-import type * as dd from "../ddast/ddast.ts";
-import type { PdfmakeTheme } from "../styler/theme.ts";
-import { DEFAULT_THEME } from "../styler/theme.ts";
+import type { TDocumentDefinitions } from "./pdfmakeTypes.ts";
+import type * as dd from "ddast";
+import type { PdfmakeTheme } from "ddast-util-style";
+import { DEFAULT_THEME } from "ddast-util-style";
 
 /**
  * ddast（既に styler.ts で見た目が確定済み）を pdfmake の Content/TDocumentDefinitions の
