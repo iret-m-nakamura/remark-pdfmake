@@ -2,7 +2,6 @@
   "name": "rehype-ddast",
   "version": "0.1.0",
   "type": "module",
-  "private": true,
   "description": "rehype plugin that transforms hast into ddast",
   "license": "MIT",
   "author": "しろうさ (shirousa)",

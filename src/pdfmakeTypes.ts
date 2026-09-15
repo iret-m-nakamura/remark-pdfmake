@@ -1,4 +1,4 @@
-import type { addFonts, createPdf } from "pdfmake";
+import type { createPdf } from "pdfmake";
 
 /**
  * pdfmake の公開型のうち、`pdfmake` パッケージへの bare import（`from "pdfmake"`）だけでは
@@ -17,9 +17,3 @@ import type { addFonts, createPdf } from "pdfmake";
 
 /** pdfmake に渡す文書定義。createPdf() の第1引数の型をそのまま使う。 */
 export type TDocumentDefinitions = Parameters<typeof createPdf>[0];
-
-/** pdfmake に登録するフォント辞書。addFonts() の引数の型をそのまま使う。 */
-export type TFontDictionary = Parameters<typeof addFonts>[0];
-
-/** ページサイズ。TDocumentDefinitions.pageSize のプロパティ型からそのまま導出する。 */
-export type PageSize = NonNullable<TDocumentDefinitions["pageSize"]>;

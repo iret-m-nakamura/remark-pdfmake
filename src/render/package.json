@@ -2,7 +2,6 @@
   "name": "pdfmake-render",
   "version": "0.1.0",
   "type": "module",
-  "private": true,
   "description": "Plain PDF rendering and caller-supplied font fetching utilities on top of pdfmake (covers src/render/ and src/fonts/; see ARCHITECTURE.md)",
   "license": "MIT",
   "author": "しろうさ (shirousa)",
