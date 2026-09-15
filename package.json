@@ -30,7 +30,7 @@
   "scripts": {
     "build": "tsdown",
     "prepack": "tsdown",
-    "test": "node --test 'src/**/*.test.ts'",
+    "test": "node --test 'src/**/*.test.ts' 'sample/**/*.test.ts'",
     "typecheck": "tsc --noEmit",
     "verify:nodenext": "node scripts/verify-nodenext.mjs"
   },
