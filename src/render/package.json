@@ -1,6 +1,6 @@
 {
   "name": "pdfmake-render",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Plain PDF rendering and caller-supplied font fetching utilities on top of pdfmake (covers src/render/, including src/render/fonts/; see ARCHITECTURE.md)",
   "license": "MIT",
